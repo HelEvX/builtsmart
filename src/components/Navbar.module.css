@@ -1,0 +1,295 @@
+.desktopNav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  backdrop-filter: blur(4px);
+  font-family: var(--font-heading);
+  transition: background-color 0.3s;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+/* Navigation Link Styling */
+.navLink {
+  position: relative;
+  display: inline-block;
+  padding: 0.75rem 1rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--white);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+/* Hover effect */
+.navLink:hover {
+  color: var(--accent);
+}
+
+/* Active state with underline */
+.navLink.active {
+  color: var(--accent);
+}
+
+/* Underline animation for hover and active states */
+.navLink::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: var(--accent);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.navLink:hover::after,
+.navLink.active::after {
+  width: 80%;
+}
+
+/* Dropdown menu base - Enhanced styling */
+.dropdown-menu {
+  min-width: 220px;
+  background-color: var(--white);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  position: absolute;
+  z-index: 100;
+  margin: 0;
+  padding: 0.5rem 0;
+  list-style: none;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  pointer-events: auto;
+  transform: translateY(-10px);
+  transition: opacity 0.2s, transform 0.2s;
+  animation: dropdownFadeIn 0.2s ease forwards;
+}
+
+.group:hover > .dropdown-menu,
+.group:focus-within > .dropdown-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+@keyframes dropdownFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-menu.top {
+  left: 0;
+  top: calc(100% + 0.5rem);
+  margin-top: 0.25rem;
+}
+
+.dropdown-menu.nested {
+  position: static;
+  background: none;
+  box-shadow: none;
+  border: none;
+  border-radius: 0;
+  min-width: 0;
+  width: max-content;
+  margin: 0;
+  padding-left: 1.25rem; /* Left indent here */
+}
+
+/* Indent only the items in nested menus */
+.dropdown-menu.nested .dropdown-item {
+  padding-left: 2.25rem; /* Increase indent for hierarchy */
+  font-size: 0.9rem;
+}
+
+/* Each dropdown menu item */
+.dropdown-menu li {
+  position: relative;
+}
+
+/* Dropdown links/buttons - Enhanced styling */
+.dropdown-item {
+  display: block;
+  text-align: left;
+  text-transform: none;
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-heading);
+  font-weight: 500;
+  color: var(--grey-800);
+  background-color: transparent;
+  border: 0;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  outline: none;
+  border-radius: 0;
+  line-height: 1.5;
+  position: relative;
+}
+
+/* Hover/focus state for dropdown items */
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: var(--brand-100);
+  color: var(--brand-700);
+  padding-left: 1.5rem;
+}
+
+/* Active dropdown item */
+.dropdown-item.active {
+  background-color: var(--brand-200);
+  color: var(--brand-700);
+  font-weight: 600;
+}
+
+.dropdown-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: var(--accent);
+}
+
+/* Parent items with children (show arrow) */
+.dropdown-item.has-children {
+  position: relative;
+  padding-right: 2.5rem;
+}
+
+.dropdown-item.has-children::after {
+  content: "→";
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9em;
+  color: var(--grey-500);
+  transition: all 0.2s ease;
+}
+
+.dropdown-item.has-children:hover::after,
+.dropdown-item.has-children:focus::after {
+  color: var(--brand-700);
+  right: 0.75rem;
+}
+
+/* Nested menu items get subtle indent */
+.dropdown-menu.nested .dropdown-item {
+  padding-left: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.dropdown-menu.nested .dropdown-item:hover,
+.dropdown-menu.nested .dropdown-item:focus {
+  padding-left: 1.75rem;
+}
+
+/* Remove outline on mouse click but keep for keyboard nav */
+.dropdown-item:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.ctaButton {
+  display: inline-block;
+  background-color: var(--accent);
+  color: var(--primary);
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: background-color 0.2s, color 0.2s;
+  font-size: 1rem;
+  margin-left: 1rem;
+}
+.ctaButton:hover,
+.ctaButton:focus {
+  background-color: var(--brand-400);
+  color: var(--primary);
+}
+
+/* Logo */
+
+.logo {
+  width: 8rem;
+  height: 2.5rem;
+  display: block;
+  color: var(--accent);
+}
+
+/* Mobile Nav */
+
+.mobileNav {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background-color: var(--secondary);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+  overflow-y: auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.textWhite {
+  color: var(--white);
+}
+
+/* RESPONSIVE STYLES */
+
+@media (min-width: 768px) {
+  .dropdown-item {
+    color: var(--grey-800);
+    background: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.375rem;
+  }
+  .dropdown-item:hover,
+  .dropdown-item:focus {
+    color: var(--brand-700);
+    background-color: var(--brand-100);
+    padding-left: 1.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .dropdown-item {
+    color: var(--white);
+    background: none;
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+  }
+  .dropdown-item:hover,
+  .dropdown-item:focus {
+    color: var(--accent);
+    background-color: transparent;
+    padding-left: 1.25rem;
+  }
+  .navLink {
+    padding: 0.5rem 1rem;
+  }
+}

@@ -32,7 +32,7 @@ export default function RootLayout({
     <html lang="nl" className={`${titillium.variable} ${manrope.variable}`}>
       <body>
         <PublicNav /> {/* This will show the nav on every page */}
-        <main>{children}</main>
+        <main className="relative">{children}</main>
       </body>
     </html>
   );

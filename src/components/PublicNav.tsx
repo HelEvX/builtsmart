@@ -1,6 +1,7 @@
 "use client";
+import styles from "./Navbar.module.css";
 import Link from "next/link";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // 1. Define a MenuItem type for type safety
 type MenuItem = {
@@ -86,35 +87,32 @@ function RecursiveDropdown({
   items: MenuItem[];
   depth?: number;
 }) {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
   return (
-    <ul className={`dropdown-menu ${depth === 0 ? "top" : "nested"}`}>
-      {items.map((item, idx) => (
-        <li
-          key={item.label}
-          className="relative group"
-          onMouseEnter={() => setOpenIndex(idx)}
-          onMouseLeave={() => setOpenIndex(null)}
-        >
+    <ul
+      className={
+        depth === 0
+          ? styles["dropdown-menu"]
+          : `${styles["dropdown-menu"]} ${styles["nested"]}`
+      }
+    >
+      {items.map((item: MenuItem) => (
+        <li key={item.label} className="relative group">
           {item.children ? (
             <>
               <button
-                className={`dropdown-item has-children`}
+                className={`${styles["dropdown-item"]} ${styles["has-children"]} w-full text-left flex items-center justify-between`}
                 aria-haspopup="true"
-                aria-expanded={openIndex === idx}
                 tabIndex={0}
               >
                 {item.label}
               </button>
-              {openIndex === idx && (
-                <RecursiveDropdown items={item.children} depth={depth + 1} />
-              )}
+              {/* Only a single <ul> for the nested dropdown */}
+              <RecursiveDropdown items={item.children} depth={depth + 1} />
             </>
           ) : (
-            <Link href={item.url!} className="dropdown-item">
+            <a href={item.url} className={`${styles["dropdown-item"]} block`}>
               {item.label}
-            </Link>
+            </a>
           )}
         </li>
       ))}
@@ -134,7 +132,7 @@ function MobileDropdown({
   return (
     <li>
       <button
-        className="w-full flex justify-between items-center px-4 py-2 text-[var(--white)] hover:text-[var(--accent)] transition"
+        className={`${styles["dropdown-item"]} w-full flex justify-between items-center`}
         onClick={() => setOpen((prev) => !prev)}
       >
         {item.label}
@@ -153,7 +151,7 @@ function MobileDropdown({
               <li key={child.label}>
                 <Link
                   href={child.url!}
-                  className="block px-4 py-2 text-[var(--white)] hover:text-[var(--accent)] transition"
+                  className={`${styles["dropdown-item"]} block`}
                   onClick={() => setMobileOpen(false)}
                 >
                   {child.label}
@@ -171,15 +169,28 @@ function MobileDropdown({
 export default function PublicNav() {
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    function onScroll() {
+      setScrolled(window.scrollY > 10);
+    }
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <nav className="w-full bg-[var(--secondary)] font-heading">
+    <nav
+      className={`${styles.navbar} ${
+        scrolled ? styles.navbarScrolled : styles.navbarTransparent
+      }`}
+    >
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-2">
         {/* Logo */}
         <div className="flex items-center gap-2">
           <svg
             viewBox="0 0 360 60"
-            className="w-32 h-10 text-[var(--accent)]"
+            className={styles.logo}
             aria-label="BuiltSmart logo"
           >
             <path
@@ -203,54 +214,47 @@ export default function PublicNav() {
         </button>
 
         {/* Desktop Nav */}
-        <ul className="hidden md:flex items-center gap-2">
+        <ul className={styles.desktopNav}>
           <li>
-            <Link
-              href="/"
-              className="px-4 py-2 text-[var(--white)] hover:text-[var(--accent)] transition"
-            >
+            <Link href="/" className={styles.navLink}>
               Home
             </Link>
           </li>
           {menu.map((item, idx) =>
             item.children ? (
-              <li
-                key={item.label}
-                className="relative group"
-                onMouseEnter={() => setOpenDropdown(idx)}
-                onMouseLeave={() => setOpenDropdown(null)}
-              >
-                <button
-                  className="px-4 py-2 font-heading text-[var(--white)] hover:text-[var(--accent)] transition"
-                  aria-haspopup="true"
-                  aria-expanded={openDropdown === idx}
+              <li key={item.label} className="relative">
+                <div
+                  onMouseEnter={() => setOpenDropdown(idx)}
+                  onMouseLeave={() => setOpenDropdown(null)}
+                  style={{ display: "inline-block" }}
                 >
-                  {item.label}
-                </button>
-                {openDropdown === idx && (
-                  <div className="absolute left-0 top-full z-20">
-                    <RecursiveDropdown items={item.children} depth={0} />
-                  </div>
-                )}
+                  <button
+                    className={styles.navLink}
+                    aria-haspopup="true"
+                    aria-expanded={openDropdown === idx}
+                  >
+                    {item.label}
+                  </button>
+                  {openDropdown === idx && (
+                    <div className="absolute left-0 top-full z-20">
+                      <RecursiveDropdown items={item.children} depth={0} />
+                    </div>
+                  )}
+                </div>
               </li>
             ) : (
               <li key={item.label}>
-                <Link
-                  href={item.url!}
-                  className="px-4 py-2 text-[var(--white)] hover:text-[var(--accent)] transition"
-                >
+                <Link href={item.url!} className={styles.navLink}>
                   {item.label}
                 </Link>
               </li>
             )
           )}
         </ul>
+
         {/* Desktop Call to Action Button */}
         <div className="hidden md:block">
-          <a
-            href="#"
-            className="bg-[var(--accent)] text-[var(--primary)] font-bold px-4 py-2 rounded hover:bg-[var(--brand-400)] transition"
-          >
+          <a href="#" className={styles.ctaButton}>
             Lid worden
           </a>
         </div>
@@ -258,12 +262,9 @@ export default function PublicNav() {
 
       {/* Mobile Nav */}
       {mobileOpen && (
-        <div
-          className="fixed inset-0 z-50 md:hidden bg-[var(--secondary)] px-4 pb-4 overflow-y-auto"
-          style={{ minHeight: "100vh" }}
-        >
+        <div className={styles.mobileNav}>
           <button
-            className="absolute top-4 right-4 z-50 text-[var(--white)] md:hidden"
+            className={`${styles.textWhite} absolute top-4 right-4 z-50 md:hidden`}
             aria-label={mobileOpen ? "Sluit menu" : "Open menu"}
             onClick={() => setMobileOpen(!mobileOpen)}
             type="button"
@@ -313,7 +314,7 @@ export default function PublicNav() {
             <li>
               <Link
                 href="/"
-                className="block px-4 py-2 text-[var(--white)] hover:text-[var(--accent)] transition"
+                className={styles["dropdown-item"]}
                 onClick={() => {
                   console.log("Home link clicked");
                   setMobileOpen(false);
@@ -333,7 +334,7 @@ export default function PublicNav() {
                 <li key={item.label}>
                   <Link
                     href={item.url!}
-                    className="block px-4 py-2 text-[var(--white)] hover:text-[var(--accent)] transition"
+                    className={styles["dropdown-item"]}
                     onClick={() => setMobileOpen(false)}
                   >
                     {item.label}
@@ -344,7 +345,7 @@ export default function PublicNav() {
             <li>
               <a
                 href="#"
-                className="block bg-[var(--accent)] text-[var(--primary)] font-bold px-4 py-2 rounded hover:bg-[var(--brand-400)] transition mt-2"
+                className={styles.ctaButton}
                 onClick={() => setMobileOpen(false)}
               >
                 Lid worden
