@@ -132,12 +132,13 @@ function MobileDropdown({
   return (
     <li>
       <button
-        className={`${styles["dropdown-item"]} w-full flex justify-between items-center`}
+        className={styles.navLink + " w-full flex justify-between items-center"}
         onClick={() => setOpen((prev) => !prev)}
       >
         {item.label}
         <span>{open ? "▲" : "▼"}</span>
       </button>
+
       {open && item.children && (
         <ul className="pl-6">
           {item.children.map((child) =>
@@ -310,11 +311,11 @@ export default function PublicNav() {
             </svg>
           </button>
 
-          <ul className="flex flex-col gap-2 pt-4">
+          <ul className="flex flex-col gap-8 pt-10">
             <li>
               <Link
                 href="/"
-                className={styles["dropdown-item"]}
+                className={styles.navLink}
                 onClick={() => {
                   console.log("Home link clicked");
                   setMobileOpen(false);
@@ -334,7 +335,7 @@ export default function PublicNav() {
                 <li key={item.label}>
                   <Link
                     href={item.url!}
-                    className={styles["dropdown-item"]}
+                    className={styles.navLink}
                     onClick={() => setMobileOpen(false)}
                   >
                     {item.label}

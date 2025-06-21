@@ -102,12 +102,3 @@ nav button {
   font-size: 0.875rem;
   transition: all 0.3s ease;
 }
-
-/* Ensure proper spacing and alignment */
-nav ul {
-  align-items: center;
-}
-
-nav li {
-  align-items: center;
-}

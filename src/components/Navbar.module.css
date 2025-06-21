@@ -20,7 +20,7 @@
 /* Navigation Link Styling */
 .navLink {
   position: relative;
-  display: inline-block;
+  /* display: inline-block; */
   padding: 0.75rem 1rem;
   font-family: var(--font-heading);
   font-weight: 600;
@@ -243,15 +243,14 @@
 .mobileNav {
   position: fixed;
   inset: 0;
-  z-index: 50;
-  background-color: var(--secondary);
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-bottom: 1rem;
-  overflow-y: auto;
-  min-height: 100vh;
+  z-index: 100;
+  background-color: var(--primary); /* or var(--secondary) */
+  backdrop-filter: blur(6px);
   display: flex;
   flex-direction: column;
+  padding: 2rem 1rem 1rem 1rem;
+  min-height: 100vh;
+  overflow-y: auto;
   transition: background-color 0.3s, box-shadow 0.3s;
 }
 
@@ -277,6 +276,9 @@
 }
 
 @media (max-width: 767px) {
+  .desktopNav {
+    display: none !important;
+  }
   .dropdown-item {
     color: var(--white);
     background: none;
@@ -290,6 +292,6 @@
     padding-left: 1.25rem;
   }
   .navLink {
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
   }
 }
